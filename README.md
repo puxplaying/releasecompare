@@ -3,7 +3,7 @@ A Bash comparison tool, which compares the latest online Manjaro release (Offici
 
 That way it is easy to see which applications may have been added to new releases.
 
-There resulting files can be used to:
+The resulting files can be used to:
 
 - Show/Install the different packages from the online release compared to the installed packages (the ``` *release.txt ``` file)
 
