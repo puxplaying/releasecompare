@@ -5,9 +5,9 @@ That way it is easy to see which applications may have been added to new release
 
 There resulting files can be used to:
 
-- Install the different packages from the online release compared to the installed packages (the ``` *release.txt ``` file)
+- Show/Install the different packages from the online release compared to the installed packages (the ``` *release.txt ``` file)
 
-- Install only new packages which have not been removed by the User  (the ``` release-removed-uninstalled.txt ``` file)
+- Show/Install only new packages which have not been removed by the User  (the ``` release-removed-uninstalled.txt ``` file)
 
 ---
 
