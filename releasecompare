@@ -1,0 +1,202 @@
+#!/usr/bin/bash
+SHELL=/usr/bin/bash
+###
+# Create Release pkglist without packages that were uninstalled by the User
+_userreleasepkglist () {
+pacman -Q > pacman.txt
+grep "removed" /var/log/pacman.log | cut -d' ' -f5 > removed.txt
+sort removed.txt | uniq -u
+file="echo *release.txt"
+cat ${file} > install.txt
+diff -u pacman.txt removed.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee newdiffreverse.txt
+awk '!x[$0]++' newdiffreverse.txt > outfile.txt
+cat pacman.txt | cut -d' ' -f1 > comp2.txt
+diff -u comp2.txt outfile.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee ergebnis.txt
+diff --suppress-common-lines --minimal -u comp2.txt ergebnis.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee final.txt
+grep -v -f comp2.txt final.txt > 4.txt #uninstalled packages
+diff --suppress-common-lines --minimal -u 4.txt install.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee 5.txt # Package List after removing uninstalled applications from it
+diff --suppress-common-lines --minimal -u outfile.txt install.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee 6.txt # Package List after removing uninstalled applications from it
+grep -f 5.txt 6.txt > release-removed-uninstalled.txt # Final Package List after removing uninstalled applications from it (full list)
+rm -rf 4.txt 5.txt 6.txt comp2.txt ergebnis.txt final.txt install.txt newdiffreverse.txt outfile.txt pacman.txt removed.txt
+
+}
+###
+# Check if release-removed-uninstalled.txt exists in case of multiple runs with different releases
+_rerun_check () {
+  if [[ -f $(readlink -e userpkglist.txt) ]]
+  then
+    echo ""
+    echo -e "\e[7m Rerunning the script with existing comparison files will disable
+    creating the release-removed-uninstalled.txt \e[0m"
+    echo ""
+    sleep 5
+    _compare
+    rm -rf release-removed-uninstalled.txt
+  else
+    _compare
+    _userreleasepkglist
+
+  fi
+}
+###
+# Edition Choice
+_choise() {
+  echo ""
+  echo -e "\e[7m Chose the Version to compare \e[0m"
+  echo ""
+  echo "  1)Gnome"
+  echo "  2)KDE"
+  echo "  3)XFCE"
+  echo "  4)Quit"
+read -r choice
+case "$choice" in
+        1|g|gnome)
+            echo "you chose gnome"
+            choice="gnome"
+            _rerun_check
+            ;;
+        2|k|kde)
+            echo "you chose kde"
+            choice="kde"
+            _rerun_check
+            ;;
+        3|x|xfce)
+            echo "you chose xfce"
+            choice="xfce"
+            _rerun_check
+            ;;
+        4|q|quit)
+            exit
+            ;;
+        * ) echo "invalid option $REPLY"
+            ;;
+    esac
+}
+###
+# Compare results
+_compare() {
+# Get a version number
+awk -F= '/ID=/{printf $2" "} /RELEASE=/{printf $2" "} /NAME=/{print $2}' /etc/lsb-release | cut -d' ' -f2 > release.txt
+
+# Print the version number
+release=$(<release.txt)
+
+# Release URL
+wget https://osdn.net/projects/manjaro/storage/${choice}/${release}/
+
+# Final URL
+grep "pkgs.txt" index.html | head -1 | cut -d' ' -f4 | cut -c12- | cut -d. -f1-3 > path.txt
+pkgs=$(<path.txt)
+wget https://osdn.net/projects/manjaro/storage/${choice}/${release}/${pkgs}.txt
+
+# Path to packages file from release
+file="echo *pkgs.txt"
+
+# generate list of installed packages
+pacman -Q > pacman.txt
+
+# final comparision
+cat ${file} | cut -d' ' -f1 > comp1.txt
+cat pacman.txt | cut -d' ' -f1 > comp2.txt
+diff -u comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee ${choice}-${release}-release.txt # Packages from Release which are not installed local
+diff -u comp1.txt comp2.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee userpkglist.txt # Packages installed by User
+
+# clean up
+rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
+
+}
+###
+# Check if local release.txt file exists for possible installation and to avoid running a new comparison which would overwrite user changes
+_installcheck () {
+  echo ""
+  if [[ -f $(readlink -e *release.txt) ]]
+  then
+  file="echo *release.txt"
+  cat ${file} > install.txt
+  echo ""
+  echo -e "\e[7m A existing comparison was found! Please choose what to do! \e[0m"
+  echo ""
+  echo "  1)Install from *release.txt"
+  echo "  2)Install from release-removed-uninstalled.txt"
+  echo "  3)Install from *release.txt after a new comparision"
+  echo "  4)Install from release-removed-uninstalled.txt after a new comparision"
+  echo "  5)Quit"
+  read -r choice
+  case "$choice" in
+        1)
+            sudo pacman -S - < install.txt
+            rm -rf install.txt
+            ;;
+        2)
+            sudo pacman -S - < release-removed-uninstalled.txt
+            rm -rf install.txt
+            ;;
+        3)
+            rm -rf install.txt ${file} userpkglist.txt release-removed-uninstalled.txt
+            _choise
+            echo ""
+            echo -e "\e[7m Starting installation! \e[0m"
+            echo ""
+      	    sudo pacman -S - < ${choice}-${release}-release.txt
+            ;;
+        4)
+            rm -rf install.txt ${file} userpkglist.txt release-removed-uninstalled.txt
+            _choise
+            echo ""
+            echo -e "\e[7m Starting installation! \e[0m"
+            echo ""
+            sudo pacman -S - < release-removed-uninstalled.txt
+            ;;
+        5|q|quit)
+            rm -rf install.txt
+            exit
+            ;;
+        * ) echo "invalid option $REPLY"
+            ;;
+    esac
+  else
+    echo "  1)Install from *release.txt"
+    echo "  2)Install from release-removed-uninstalled.txt"
+    echo "  3)Quit"
+    read -r choice
+    case "$choice" in
+          1)
+              _choise
+              echo ""
+              echo -e "\e[7m Starting installation! \e[0m"
+              echo ""
+              sudo pacman -S - < ${choice}-${release}-release.txt
+              ;;
+          2)
+              _choise
+              echo ""
+              echo -e "\e[7m Starting installation! \e[0m"
+              echo ""
+              sudo pacman -S - < release-removed-uninstalled.txt
+              ;;
+          3|q|quit)
+              rm -rf install.txt
+              exit
+              ;;
+          * ) echo "invalid option $REPLY"
+              ;;
+      esac
+
+fi
+}
+###
+# install different packages Flag
+if [ "$1" == "install" ]; then
+  echo ""
+  echo -e "\e[7m You choose to install the packages after comparison! \e[0m"
+  _installcheck
+  exit
+fi
+###
+# Run the script without flags
+_choise
+echo ""
+echo -e "\e[7m For Installation Options Run: \e[0m"
+echo -e "\e[1m ./releasecompare install \e[0m"
+echo ""
+exit
