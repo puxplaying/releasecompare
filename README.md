@@ -1,5 +1,5 @@
 # releasecompare
-A comparison tool which compares the latest online Manjaro release (Official Editions) to the local system.
+A Bash comparison tool, which compares the latest online Manjaro release (Official Editions) to the local system.
 
 That way it is easy to see which applications may have been added to new releases.
 
