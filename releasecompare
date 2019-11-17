@@ -21,7 +21,7 @@ rm -rf 4.txt 5.txt 6.txt comp2.txt ergebnis.txt final.txt install.txt newdiffrev
 
 }
 ###
-# Check if comparision files already exist in case of multiple runs with different releases
+# Check if comparison files already exist in case of multiple runs with different releases
 _rerun_check () {
   if [[ -f $(readlink -e userpkglist.txt) ]]
   then
