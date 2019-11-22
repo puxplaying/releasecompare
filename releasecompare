@@ -1,7 +1,21 @@
 #!/usr/bin/bash
 SHELL=/usr/bin/bash
 ###
+# Make a new folder for the results 
 test -d "$HOME/releasecompare" || mkdir -p "$HOME/releasecompare" && cd $HOME/releasecompare
+###
+# Open results in Meld
+_meld () {
+    echo
+    echo -e "\e[1m Do you want to view the results in Meld? \e[0m"
+    read -r -p "$1 ([y]es or [N]o): "
+    case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
+        y|yes) echo -e "\e[1m yes \e[0m"
+        meld release-removed-uninstalled.txt *release.txt
+        ;;
+        * )     echo -e "\e[1m no \e[0m" ;;
+    esac
+}
 ###
 # Create Release pkglist without packages that were uninstalled by the User
 _userreleasepkglist () {
@@ -37,6 +51,16 @@ _rerun_check () {
   else
     _compare
     _userreleasepkglist
+    echo ""
+    echo -e "\e[7m For Installation Options Run: \e[0m"
+    echo -e "\e[1m ./releasecompare install \e[0m"
+    echo ""
+    echo ""
+    echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
+    echo -e "\e[1m $HOME/releasecompare \e[0m"
+    echo ""
+    _meld
+    exit
 
   fi
 }
@@ -197,12 +221,4 @@ fi
 ###
 # Run the script without flags
 _choise
-echo ""
-echo -e "\e[7m For Installation Options Run: \e[0m"
-echo -e "\e[1m ./releasecompare install \e[0m"
-echo ""
-echo ""
-echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
-echo -e "\e[1m $HOME/releasecompare \e[0m"
-echo ""
 exit
