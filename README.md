@@ -18,7 +18,7 @@ The resulting files can be used to:
 For installation options run: ``` ./releasecompare install ```
 
 To install manually run either:
-- ``` sudo pacman -S - < install.txt ```
+- ``` sudo pacman -S - < *release.txt ```
 - ```  sudo pacman -S - < release-removed-uninstalled.txt ```
 
 ---
