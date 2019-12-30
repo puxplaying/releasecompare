@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 SHELL=/usr/bin/bash
 ###
-# Make a new folder for the results 
+# Make a new folder for the results
 test -d "$HOME/releasecompare" || mkdir -p "$HOME/releasecompare" && cd $HOME/releasecompare
 ###
 # Open results in Meld
@@ -14,6 +14,33 @@ _meld () {
         meld release-removed-uninstalled.txt *release.txt
         ;;
         * )     echo -e "\e[1m no \e[0m" ;;
+    esac
+}
+###
+# Remove Existing Comparision Results
+_remove_results () {
+    echo
+    echo -e "\e[1m Do you want to remove existing results? \e[0m"
+    read -r -p "$1 ([y]es or [N]o): "
+    case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
+        y|yes) echo -e "\e[1m yes \e[0m"
+        rm -rf $HOME/releasecompare/*
+        _compare
+        _userreleasepkglist
+        echo ""
+        echo -e "\e[7m For Installation Options Run: \e[0m"
+        echo -e "\e[1m ./releasecompare install \e[0m"
+        echo ""
+        echo ""
+        echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
+        echo -e "\e[1m $HOME/releasecompare \e[0m"
+        echo ""
+        _meld
+        exit
+        ;;
+        * )     echo -e "\e[1m no \e[0m"
+        _compare
+        rm -rf release-removed-uninstalled.txt ;;
     esac
 }
 ###
@@ -45,9 +72,7 @@ _rerun_check () {
     echo -e "\e[7m Rerunning the script with existing comparison files will disable
     creating the release-removed-uninstalled.txt \e[0m"
     echo ""
-    sleep 5
-    _compare
-    rm -rf release-removed-uninstalled.txt
+    _remove_results
   else
     _compare
     _userreleasepkglist
