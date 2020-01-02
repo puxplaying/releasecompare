@@ -52,7 +52,7 @@ sort removed.txt | uniq -u
 file="echo *release.txt"
 cat ${file} > install.txt
 diff -c --suppress-common-lines removed.txt install.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee release-removed-uninstalled.txt
-rm -rf 4.txt 5.txt 6.txt comp2.txt ergebnis.txt final.txt install.txt newdiffreverse.txt outfile.txt pacman.txt removed.txt
+rm -rf install.txt pacman.txt removed.txt
 
 }
 ###
