@@ -47,19 +47,11 @@ _remove_results () {
 # Create Release pkglist without packages that were uninstalled by the User
 _userreleasepkglist () {
 pacman -Q > pacman.txt
-grep "removed" /var/log/pacman.log | cut -d' ' -f5 > removed.txt
+grep "removed" /var/log/pacman.log | cut -d' ' -f4 > removed.txt
 sort removed.txt | uniq -u
 file="echo *release.txt"
 cat ${file} > install.txt
-diff -u pacman.txt removed.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee newdiffreverse.txt
-awk '!x[$0]++' newdiffreverse.txt > outfile.txt
-cat pacman.txt | cut -d' ' -f1 > comp2.txt
-diff -u comp2.txt outfile.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee ergebnis.txt
-diff --suppress-common-lines --minimal -u comp2.txt ergebnis.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee final.txt
-grep -v -f comp2.txt final.txt > 4.txt #uninstalled packages
-diff --suppress-common-lines --minimal -u 4.txt install.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee 5.txt # Package List after removing uninstalled applications from it
-diff --suppress-common-lines --minimal -u outfile.txt install.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee 6.txt # Package List after removing uninstalled applications from it
-grep -f 5.txt 6.txt > release-removed-uninstalled.txt # Final Package List after removing uninstalled applications from it (full list)
+diff -c --suppress-common-lines removed.txt install.txt | grep -E "^\+" | sed '1d'  | cut -c2- | tee release-removed-uninstalled.txt
 rm -rf 4.txt 5.txt 6.txt comp2.txt ergebnis.txt final.txt install.txt newdiffreverse.txt outfile.txt pacman.txt removed.txt
 
 }
