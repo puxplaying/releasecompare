@@ -51,7 +51,7 @@ grep "removed" /var/log/pacman.log | awk -F '[: ]' '{print $6}'  > removed.txt
 sort removed.txt | uniq -u | tee removed.txt
 file="echo *release.txt"
 cat ${file} > install.txt
-diff --suppress-common-lines removed.txt install.txt | awk -F '<' '{print $1}' | grep ">" | cut -c2- | tee release-removed-uninstalled.txt
+diff --suppress-common-lines removed.txt install.txt | awk -F '<' '{print $1}' | grep ">" | cut -c3- | tee release-removed-uninstalled.txt
 rm -rf 4.txt 5.txt 6.txt comp2.txt ergebnis.txt final.txt install.txt newdiffreverse.txt outfile.txt pacman.txt removed.txt
 
 }
