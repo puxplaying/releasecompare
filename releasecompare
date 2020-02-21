@@ -24,7 +24,7 @@ case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
     rm -rf $HOME/releasecompare/*
 
     echo ""
-    echo -e "Please go to\e[7m https://osdn.net/projects/manjaro/storage/(Edition)/(Release_Number)/*pkgs.txt\e[0m and copy the URL."
+    echo -e "Please go to \e[7mhttps://osdn.net/projects/manjaro/storage/ (Edition)/(Release_Number)/*pkgs.txt\e[0m and copy the URL."
     echo ""
     echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
     echo -e "  2) Quit"
@@ -73,7 +73,7 @@ case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
     ;;
     * )     echo -e "\e[1m no \e[0m"
     echo ""
-    echo -e "Please go to\e[7m https://osdn.net/projects/manjaro/storage/(Edition)/(Release_Number)/*pkgs.txt\e[0m and copy the URL."
+    echo -e "Please go to \e[7mhttps://osdn.net/projects/manjaro/storage/ (Edition)/(Release_Number)/*pkgs.txt\e[0m and copy the URL."
     echo ""
     echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
     echo -e "  2) Quit"
@@ -275,7 +275,7 @@ then
 else
   echo ""
   echo -e "Something went wrong, local release number does not match online release !!!"
-  echo -e "Please go to\e[7m https://osdn.net/projects/manjaro/storage/(Edition)/(Release_Number)/*pkgs.txt\e[0m and copy the URL."
+  echo -e "Please go to \e[7mhttps://osdn.net/projects/manjaro/storage/ (Edition)/(Release_Number)/*pkgs.txt\e[0m and copy the URL."
   echo ""
   echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
   echo -e "  2) Quit"
