@@ -39,7 +39,7 @@ case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
                 # generate list of installed packages
                 pacman -Q > pacman.txt
 
-                # final comparision
+                # final Comparison
                 cat ${file} | cut -d' ' -f1 > comp1.txt
                 cat pacman.txt | cut -d' ' -f1 > comp2.txt
                 diff -u comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee ${choice}-${release}-release.txt # Packages from Release which are not installed local
@@ -88,7 +88,7 @@ case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
                 # generate list of installed packages
                 pacman -Q > pacman.txt
 
-                # final comparision
+                # final Comparison
                 cat ${file} | cut -d' ' -f1 > comp1.txt
                 cat pacman.txt | cut -d' ' -f1 > comp2.txt
                 diff -u comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee ${choice}-${release}-release.txt # Packages from Release which are not installed local
@@ -136,7 +136,7 @@ _meld () {
     esac
 }
 ###
-# Remove Existing Comparision Results
+# Remove Existing Comparison Results
 _remove_results () {
     echo
     echo -e "\e[1m Do you want to remove existing results? \e[0m"
@@ -263,7 +263,7 @@ then
   # generate list of installed packages
   pacman -Q > pacman.txt
 
-  # final comparision
+  # final Comparison
   cat ${file} | cut -d' ' -f1 > comp1.txt
   cat pacman.txt | cut -d' ' -f1 > comp2.txt
   diff -u comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee ${choice}-${release}-release.txt # Packages from Release which are not installed local
@@ -290,7 +290,7 @@ else
               # generate list of installed packages
               pacman -Q > pacman.txt
 
-              # final comparision
+              # final Comparison
               cat ${file} | cut -d' ' -f1 > comp1.txt
               cat pacman.txt | cut -d' ' -f1 > comp2.txt
               diff -u comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee ${choice}-${release}-release.txt # Packages from Release which are not installed local
@@ -327,8 +327,8 @@ _installcheck () {
   echo ""
   echo "  1) Install from *release.txt"
   echo "  2) Install from release-removed-uninstalled.txt"
-  echo "  3) Install from *release.txt after a new comparision"
-  echo "  4) Install from release-removed-uninstalled.txt after a new comparision"
+  echo "  3) Install from *release.txt after a new Comparison"
+  echo "  4) Install from release-removed-uninstalled.txt after a new Comparison"
   echo "  5) Quit"
   read -r choice
   case "$choice" in
