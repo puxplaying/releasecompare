@@ -65,7 +65,7 @@ case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
     echo -e "\e[1m ./releasecompare install \e[0m"
     echo ""
     echo ""
-    echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
+    echo -e "\e[7m The Results Were Saved To: \e[0m"
     echo -e "\e[1m $HOME/releasecompare \e[0m"
     echo ""
     _meld
@@ -114,7 +114,7 @@ case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
     echo -e "\e[1m ./releasecompare install \e[0m"
     echo ""
     echo ""
-    echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
+    echo -e "\e[7m The Results Were Saved To: \e[0m"
     echo -e "\e[1m $HOME/releasecompare \e[0m"
     echo ""
     _meld
@@ -151,7 +151,7 @@ _remove_results () {
         echo -e "\e[1m ./releasecompare install \e[0m"
         echo ""
         echo ""
-        echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
+        echo -e "\e[7m The Results Were Saved To: \e[0m"
         echo -e "\e[1m $HOME/releasecompare \e[0m"
         echo ""
         _meld
@@ -192,7 +192,7 @@ _rerun_check () {
     echo -e "\e[1m ./releasecompare install \e[0m"
     echo ""
     echo ""
-    echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
+    echo -e "\e[7m The Results Were Saved To: \e[0m"
     echo -e "\e[1m $HOME/releasecompare \e[0m"
     echo ""
     _meld
