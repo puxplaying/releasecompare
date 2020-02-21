@@ -14,6 +14,115 @@ SHELL=/usr/bin/bash
 # Make a new folder for the results
 test -d "$HOME/releasecompare" || mkdir -p "$HOME/releasecompare" && cd $HOME/releasecompare
 ###
+# Custom URL to *pkgs.txt
+_custom_URL() {
+echo
+echo -e "\e[1m Do you want to remove any existing results? \e[0m"
+read -r -p "$1 ([y]es or [N]o): "
+case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
+    y|yes) echo -e "\e[1m yes \e[0m"
+    rm -rf $HOME/releasecompare/*
+
+    echo ""
+    echo -e "Please go to\e[7m https://osdn.net/projects/manjaro/storage/(Edition)/(Release_Number)/*pkgs.txt\e[0m and copy the URL."
+    echo ""
+    echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
+    echo -e "  2) Quit"
+    read -r choice
+    case "$choice" in
+            1)
+                echo -e "paste the URL to *pkgs.txt"
+                read -p 'URL: ' uservar
+                wget $uservar
+                file="echo *pkgs.txt"
+
+                # generate list of installed packages
+                pacman -Q > pacman.txt
+
+                # final comparision
+                cat ${file} | cut -d' ' -f1 > comp1.txt
+                cat pacman.txt | cut -d' ' -f1 > comp2.txt
+                diff -u comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee ${choice}-${release}-release.txt # Packages from Release which are not installed local
+                diff -u comp1.txt comp2.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee userpkglist.txt # Packages installed by User
+
+                # clean up
+                rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
+
+                ;;
+
+            2|q|quit)
+                # clean up
+                rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
+                exit
+                ;;
+            * ) echo "invalid option $REPLY"
+                ;;
+        esac
+
+    _userreleasepkglist
+    echo ""
+    echo -e "\e[7m For Installation Options Run: \e[0m"
+    echo -e "\e[1m ./releasecompare install \e[0m"
+    echo ""
+    echo ""
+    echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
+    echo -e "\e[1m $HOME/releasecompare \e[0m"
+    echo ""
+    _meld
+    exit
+    ;;
+    * )     echo -e "\e[1m no \e[0m"
+    echo ""
+    echo -e "Please go to\e[7m https://osdn.net/projects/manjaro/storage/(Edition)/(Release_Number)/*pkgs.txt\e[0m and copy the URL."
+    echo ""
+    echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
+    echo -e "  2) Quit"
+    read -r choice
+    case "$choice" in
+            1)
+                echo -e "paste the URL to *pkgs.txt"
+                read -p 'URL: ' uservar
+                wget $uservar
+                file="echo *pkgs.txt"
+
+                # generate list of installed packages
+                pacman -Q > pacman.txt
+
+                # final comparision
+                cat ${file} | cut -d' ' -f1 > comp1.txt
+                cat pacman.txt | cut -d' ' -f1 > comp2.txt
+                diff -u comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee ${choice}-${release}-release.txt # Packages from Release which are not installed local
+                diff -u comp1.txt comp2.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee userpkglist.txt # Packages installed by User
+
+                # clean up
+                rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
+
+                ;;
+
+            2|q|quit)
+                # clean up
+                rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
+                exit
+                ;;
+            * ) echo "invalid option $REPLY"
+                ;;
+        esac
+
+    _userreleasepkglist
+    echo ""
+    echo -e "\e[7m For Installation Options Run: \e[0m"
+    echo -e "\e[1m ./releasecompare install \e[0m"
+    echo ""
+    echo ""
+    echo -e "\e[7m The Comparision Results Were Saved To: \e[0m"
+    echo -e "\e[1m $HOME/releasecompare \e[0m"
+    echo ""
+    _meld
+    rm -rf release-removed-uninstalled.txt
+    exit ;;
+esac
+
+}
 # Open results in Meld
 _meld () {
     echo
@@ -100,7 +209,8 @@ _choise() {
   echo "  1) Gnome"
   echo "  2) KDE"
   echo "  3) XFCE"
-  echo "  4) Quit"
+  echo "  4) Custom URL (Compare any Edition)"
+  echo "  5) Quit"
 read -r choice
 case "$choice" in
         1|g|gnome)
@@ -118,7 +228,10 @@ case "$choice" in
             choice="xfce"
             _rerun_check
             ;;
-        4|q|quit)
+        4|u|url)
+            _custom_URL
+            ;;
+        5|q|quit)
             exit
             ;;
         * ) echo "invalid option $REPLY"
@@ -287,6 +400,11 @@ if [ "$1" == "install" ]; then
   echo -e "\e[7m Installation Options \e[0m"
   _installcheck
   exit
+fi
+###
+# Compare from custom *pkgs URL Flag
+if [ "$1" == "-u" ]; then
+  _custom_URL
 fi
 ###
 # Run the script without flags
