@@ -118,7 +118,7 @@ case $(echo "$REPLY" | tr '[:upper:]' '[:lower:]') in
     echo -e "\e[1m $HOME/releasecompare \e[0m"
     echo ""
     _meld
-    rm -rf release-removed-uninstalled.txt
+    #rm -rf release-removed-uninstalled.txt
     exit ;;
 esac
 
