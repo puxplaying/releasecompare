@@ -71,6 +71,7 @@ _custom_URL() {
                 ;;
             * ) echo "invalid option $REPLY"
                 rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
+                exit
                 ;;
         esac
 ;;
@@ -123,6 +124,7 @@ _custom_URL() {
                 ;;
             * ) echo "invalid option $REPLY"
                 rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
+                exit
                 ;;
         esac
 
