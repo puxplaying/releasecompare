@@ -291,10 +291,10 @@ _GetPkgsUrl() {
     printf '\33[H\33[2J'
     echo ""
     echo -e "Something went wrong, local release number does not match online release !!!"
+    echo -e "Trying Redirection!"
     echo ""
     sleep 3
-    _custom_URL
-    #_GetPkgsUrlRedirection
+    _GetPkgsUrlRedirection
 
   fi
 }
@@ -305,27 +305,23 @@ _GetPkgsUrlRedirection() {
   declare iso url
   iso="$(curl -sL https://manjaro.osdn.io/${choice}/latest | sed -e 's/\"/\n/g' | grep -Eo 'http.*iso$' -m1 )"
   url="${iso/.iso/-pkgs.txt}"
-  curl -sL "$url" | awk '{print $1}' | sort | tee pkgs.txt
-
+  #curl -sL "$url" | awk '{print $1}' | sort
+  if wget -q "$url"
+  then
   # Path to packages file from release
-  file="pkgs.txt"
+  file="echo *pkgs.txt"
 
   # generate list of installed packages
   pacman -Q > pacman.txt
 
   # final Comparison
-  cat ${file} > comp1.txt
+  cat ${file} | cut -d' ' -f1 > comp1.txt
   cat pacman.txt | cut -d' ' -f1 > comp2.txt
-  diff -c comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee ${choice}-release.txt # Packages from Release which are not installed local
+  diff -u comp2.txt comp1.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee release.txt # Packages from Release which are not installed local
   diff -u comp1.txt comp2.txt | grep -E "^\+" | sed '1d'  | cut -c2-  | tee userpkglist.txt # Packages installed by User
 
   # clean up
-  rm -rf pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt
-
-  if
-    [ -s "release-removed-uninstalled.txt" ]
-  then
-    return
+  rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt
 
   else
     printf '\33[H\33[2J'
