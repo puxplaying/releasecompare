@@ -261,14 +261,10 @@ _GetPkgsUrl() {
   # Print the version number
   release=$(<release.txt)
 
-  # Release URL
-  wget https://osdn.net/projects/manjaro/storage/${choice}/${release}/
+  declare iso url
+  pkgs="$(curl -sL https://osdn.net/projects/manjaro/storage/${choice}/${release}/ | sed -e 's/\"/\n/g' | grep -Eo '.*txt$' -m1 )"
 
-  # Final URL
-  grep "pkgs.txt" index.html | head -1 | cut -d' ' -f4 | cut -c12- | cut -d. -f1-3 > path.txt
-  pkgs=$(<path.txt)
-
-  if wget -q "https://osdn.net/projects/manjaro/storage/${choice}/${release}/${pkgs}.txt"
+  if wget -q "https://osdn.net/projects/manjaro/storage/${choice}/${release}/$pkgs"
   then
     #statements
     # Path to packages file from release
