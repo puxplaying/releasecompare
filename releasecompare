@@ -261,12 +261,11 @@ _GetPkgsUrl() {
   # Print the version number
   release=$(<release.txt)
 
-  declare iso url
+  declare iso pkgs
   pkgs="$(curl -sL https://osdn.net/projects/manjaro/storage/${choice}/${release}/ | sed -e 's/\"/\n/g' | grep -Eo '.*txt$' -m1 )"
 
   if wget -q "https://osdn.net/projects/manjaro/storage/${choice}/${release}/$pkgs"
   then
-    #statements
     # Path to packages file from release
     file="echo *pkgs.txt"
 
@@ -371,7 +370,7 @@ _installcheck () {
             echo ""
             echo -e "\e[7m Starting installation! \e[0m"
             echo ""
-      	    sudo pacman -S - < ${choice}-${release}-release.txt
+      	    sudo pacman -S - < *release.txt
             ;;
         4)
             rm -rf install.txt ${file} userpkglist.txt release-removed-uninstalled.txt
@@ -399,7 +398,7 @@ _installcheck () {
               echo ""
               echo -e "\e[7m Starting installation! \e[0m"
               echo ""
-              sudo pacman -S - < ${choice}-${release}-release.txt
+              sudo pacman -S - < *release.txt
               ;;
           2)
               _choise
@@ -428,7 +427,7 @@ if [ "$1" == "install" ]; then
 fi
 ###
 # Compare from custom *pkgs URL Flag
-if [ "$1" == "-u" ]; then
+if [ "$1" == "url" ]; then
   _custom_URL
 fi
 ###
