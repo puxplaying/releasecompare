@@ -332,8 +332,8 @@ _GetPkgsUrlRedirection() {
 ###
 # Compare results
 _compare() {
-  _GetPkgsUrl
-  #_GetPkgsUrlRedirection
+  #_GetPkgsUrl
+  _GetPkgsUrlRedirection
 
 
 }
