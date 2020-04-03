@@ -30,7 +30,7 @@ _custom_URL() {
     echo ""
     echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
     echo -e "  2) Quit"
-    read -r choice
+    read -s -n1 choice
     case "$choice" in
             1)
                 echo -e "paste the URL to *pkgs.txt"
@@ -52,10 +52,6 @@ _custom_URL() {
 
                 _userreleasepkglist
                 printf '\33[H\33[2J'
-                echo ""
-                echo -e "\e[7m For Installation Options Run: \e[0m"
-                echo -e "\e[1m ./releasecompare install \e[0m"
-                echo ""
                 echo ""
                 echo -e "\e[7m The Results Were Saved To: \e[0m"
                 echo -e "\e[1m $HOME/releasecompare \e[0m"
@@ -82,7 +78,7 @@ _custom_URL() {
     echo ""
     echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
     echo -e "  2) Quit"
-    read -r choice
+    read -s -n1 choice
     case "$choice" in
             1)
                 echo -e "paste the URL to *pkgs.txt"
@@ -104,10 +100,6 @@ _custom_URL() {
 
                 _userreleasepkglist
                 printf '\33[H\33[2J'
-                echo ""
-                echo -e "\e[7m For Installation Options Run: \e[0m"
-                echo -e "\e[1m ./releasecompare install \e[0m"
-                echo ""
                 echo ""
                 echo -e "\e[7m The Results Were Saved To: \e[0m"
                 echo -e "\e[1m $HOME/releasecompare \e[0m"
@@ -157,10 +149,6 @@ _remove_results () {
         _userreleasepkglist
         printf '\33[H\33[2J'
         echo ""
-        echo -e "\e[7m For Installation Options Run: \e[0m"
-        echo -e "\e[1m ./releasecompare install \e[0m"
-        echo ""
-        echo ""
         echo -e "\e[7m The Results Were Saved To: \e[0m"
         echo -e "\e[1m $HOME/releasecompare \e[0m"
         echo ""
@@ -191,18 +179,14 @@ _rerun_check () {
   if [[ -f $(readlink -e userpkglist.txt) ]]
   then
     echo ""
-    echo -e "\e[7m Rerunning the script with existing comparison files will disable
-    creating the release-removed-uninstalled.txt \e[0m"
+    echo -e "\e[7m Rerunning the script with existing comparison files \e[0m"
+    echo -e "\e[7m will disable creating the release-removed-uninstalled.txt \e[0m"
     echo ""
     _remove_results
   else
     _compare
     _userreleasepkglist
     printf '\33[H\33[2J'
-    echo ""
-    echo -e "\e[7m For Installation Options Run: \e[0m"
-    echo -e "\e[1m ./releasecompare install \e[0m"
-    echo ""
     echo ""
     echo -e "\e[7m The Results Were Saved To: \e[0m"
     echo -e "\e[1m $HOME/releasecompare \e[0m"
@@ -224,7 +208,7 @@ _choise() {
   echo "  3) XFCE"
   echo "  4) Custom URL (Compare any Edition)"
   echo "  5) Quit"
-read -r choice
+read -s -n1 choice
 case "$choice" in
         1|g|gnome)
             echo "you chose gnome"
@@ -354,7 +338,7 @@ _installcheck () {
   echo "  3) Install from *release.txt after a new Comparison"
   echo "  4) Install from release-removed-uninstalled.txt after a new Comparison"
   echo "  5) Quit"
-  read -r choice
+  read -s -n1 choice
   case "$choice" in
         1)
             sudo pacman -S - < install.txt
@@ -391,7 +375,7 @@ _installcheck () {
     echo "  1) Install from *release.txt"
     echo "  2) Install from release-removed-uninstalled.txt"
     echo "  3) Quit"
-    read -r choice
+    read -s -n1 choice
     case "$choice" in
           1)
               _choise
