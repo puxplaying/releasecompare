@@ -29,7 +29,7 @@ _custom_URL() {
     echo -e "\e[1m-> Edition\e[0m \e[1m-> Release_Number\e[0m \e[1m-> *pkgs.txt\e[0m and copy the URL."
     echo ""
     echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
-    echo -e "  2) Quit"
+    echo -e "  0) Quit"
     read -s -n1 choice
     case "$choice" in
             1)
@@ -60,7 +60,7 @@ _custom_URL() {
                 exit
                 ;;
 
-            2|q|quit)
+            0|q)
                 # clean up
                 rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
                 exit
@@ -77,7 +77,7 @@ _custom_URL() {
     echo -e "\e[1m-> Edition\e[0m \e[1m-> Release_Number\e[0m \e[1m-> *pkgs.txt\e[0m and copy the URL."
     echo ""
     echo -e "  1) Copy/Paste the URL to *pkgs.txt and press ENTER"
-    echo -e "  2) Quit"
+    echo -e "  0) Quit"
     read -s -n1 choice
     case "$choice" in
             1)
@@ -109,7 +109,7 @@ _custom_URL() {
                 exit
                 ;;
 
-            2|q|quit)
+            0|q)
                 # clean up
                 rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
                 exit
@@ -207,28 +207,28 @@ _choise() {
   echo "  2) KDE"
   echo "  3) XFCE"
   echo "  4) Custom URL (Compare any Edition)"
-  echo "  5) Quit"
+  echo "  0) Quit"
 read -s -n1 choice
 case "$choice" in
-        1|g|gnome)
+        1|g)
             echo "you chose gnome"
             choice="${1:-gnome}"
             _rerun_check
             ;;
-        2|k|kde)
+        2|k)
             echo "you chose kde"
             choice="${1:-kde}"
             _rerun_check
             ;;
-        3|x|xfce)
+        3|x)
             echo "you chose xfce"
             choice="${1:-xfce}"
             _rerun_check
             ;;
-        4|u|url)
+        4|u)
             _custom_URL
             ;;
-        5|q|quit)
+        0|q)
             exit
             ;;
         * ) echo "invalid option $REPLY"
@@ -337,7 +337,7 @@ _installcheck () {
   echo "  2) Install from release-removed-uninstalled.txt"
   echo "  3) Install from *release.txt after a new Comparison"
   echo "  4) Install from release-removed-uninstalled.txt after a new Comparison"
-  echo "  5) Quit"
+  echo "  0) Quit"
   read -s -n1 choice
   case "$choice" in
         1)
@@ -364,7 +364,7 @@ _installcheck () {
             echo ""
             sudo pacman -S - < release-removed-uninstalled.txt
             ;;
-        5|q|quit)
+        0|q)
             rm -rf install.txt
             exit
             ;;
@@ -374,7 +374,7 @@ _installcheck () {
   else
     echo "  1) Install from *release.txt"
     echo "  2) Install from release-removed-uninstalled.txt"
-    echo "  3) Quit"
+    echo "  0) Quit"
     read -s -n1 choice
     case "$choice" in
           1)
@@ -391,7 +391,7 @@ _installcheck () {
               echo ""
               sudo pacman -S - < release-removed-uninstalled.txt
               ;;
-          3|q|quit)
+          0|q)
               rm -rf install.txt
               exit
               ;;
