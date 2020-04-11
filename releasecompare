@@ -57,17 +57,14 @@ _custom_URL() {
                 echo -e "\e[1m $HOME/releasecompare \e[0m"
                 echo ""
                 _meld
-                exit
                 ;;
 
             0|q)
                 # clean up
                 rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
-                exit
                 ;;
             * ) echo "invalid option $REPLY"
                 rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
-                exit
                 ;;
         esac
 ;;
@@ -106,17 +103,14 @@ _custom_URL() {
                 echo ""
                 _meld
                 #rm -rf release-removed-uninstalled.txt
-                exit
                 ;;
 
             0|q)
                 # clean up
                 rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
-                exit
                 ;;
             * ) echo "invalid option $REPLY"
                 rm -rf *pkgs.txt comp1.txt comp2.txt pacman.txt index.html path.txt release.txt
-                exit
                 ;;
         esac
 
@@ -153,7 +147,6 @@ _remove_results () {
         echo -e "\e[1m $HOME/releasecompare \e[0m"
         echo ""
         _meld
-        exit
         ;;
         * )     echo -e "\e[1m no \e[0m"
         _compare
@@ -192,7 +185,6 @@ _rerun_check () {
     echo -e "\e[1m $HOME/releasecompare \e[0m"
     echo ""
     _meld
-    exit
 
   fi
 }
@@ -229,7 +221,6 @@ case "$choice" in
             _custom_URL
             ;;
         0|q)
-            exit
             ;;
         * ) echo "invalid option $REPLY"
             ;;
@@ -366,7 +357,6 @@ _installcheck () {
             ;;
         0|q)
             rm -rf install.txt
-            exit
             ;;
         * ) echo "invalid option $REPLY"
             ;;
@@ -393,7 +383,6 @@ _installcheck () {
               ;;
           0|q)
               rm -rf install.txt
-              exit
               ;;
           * ) echo "invalid option $REPLY"
               ;;
@@ -407,7 +396,6 @@ if [ "$1" == "install" ]; then
   echo ""
   echo -e "\e[7m Installation Options \e[0m"
   _installcheck
-  exit
 fi
 ###
 # Compare from custom *pkgs URL Flag
@@ -417,4 +405,3 @@ fi
 ###
 # Run the script without flags
 _choise
-exit
